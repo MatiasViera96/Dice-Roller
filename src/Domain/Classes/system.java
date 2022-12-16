@@ -4,7 +4,7 @@ import Domain.Classes.die;
 import java.util.ArrayList;
 
 public class system {
-  
+
   private void checkDieDataEntry(int[] diceType, int[] diceAmount)throws Exception{
 
     if(diceType.length!=diceAmount.length) throw new Exception("Error: the amount of dice to roll must be equal to the length of diceType");
