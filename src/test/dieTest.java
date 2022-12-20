@@ -3,7 +3,7 @@ package test;
 import Domain.Classes.die;
 import java.util.*;
 
-public class dieTest {
+class dieTest {
   /**
    * This class is used to test the die class and its functionalities
    */

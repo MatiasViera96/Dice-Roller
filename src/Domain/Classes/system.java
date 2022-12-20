@@ -1,31 +1,10 @@
 package Domain.Classes;
-import Domain.Classes.die;
+import Domain.Controllers.dieController;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class system {
-  /**
-   * This function test that the input values to be rolled are ok
-   * the only accepted die are d4,d6,d8,d10, d12 and d20
-   * @param diceType that contains all the dice to roll. For example {6,8,10} in this case this function roll
-   *    *             d6,d8,d10 an amount of times wich must be specified in diceAmont variable
-   * @param diceAmount that contains the amount of dice to be roll for each die in diceType variable
-   * @throws Exception In case that this function detects an error in the data input returns an exception with the
-   *                   corresponding error message
-   */
-  private void checkDieDataEntry(int[] diceType, int[] diceAmount)throws Exception{
-
-    if(diceType.length!=diceAmount.length) throw new Exception("Error: the amount of dice to roll must be equal to the length of diceType");
-    int [] check ={4,6,8,10,12,20};
-    for(int i =0;i<diceAmount.length;i++) {
-      boolean contains = false;
-      for(int j=0;j<check.length && !contains;j++){
-        if(check[j]==diceAmount[i]) contains = true;
-      }
-      if (!contains) throw new Exception("dieType values must be 4,6,10,12 or 20");
-    }
-    //everything is ok!
-  }
 
   /**
    * This function calculates all the values of the dice rolled and returns them.
@@ -42,20 +21,8 @@ public class system {
    * @throws Exception In case that this function detects an error in the data input returns an exception with the
    *                   corresponding error message
    */
-  public ArrayList<Integer>[] rollDie(int[] diceType, int[] diceAmount) throws Exception{
-    checkDieDataEntry(diceType,diceAmount);
-    ArrayList<Integer>[] ret = new ArrayList[diceType.length];
-    for (int i =0;i<diceType.length;i++){
-      die rollingDie = new die(diceType[i]);
-      int sum = 0;
-      for(int j = 0 ; j <diceAmount[i];j++){
-        int value = rollingDie.roll();
-        ret[i].add(value);
-        sum+=value;
-      }
-      if(diceAmount[i]>1) ret[i].add(0,sum);
-    }
-    return ret;
+  public List<Integer>[] rollDie(int[] diceType, int[] diceAmount) throws Exception {
+    return new dieController().rollDie(diceType, diceAmount);
   }
 
 }
