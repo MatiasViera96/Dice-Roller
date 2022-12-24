@@ -8,13 +8,14 @@ class MainTest {
    * A simple main method which executes unitary test for dice roller app
    * @param args
    */
-  public static void mainTest(String[] args){
+  public static void main(String[] args) {
     executeDieTests();
   }
 
   /**
    * A simple test method for test the die class
    */
+
   private static void executeDieTests(){
     dieTest test = new dieTest();
     test.test(4);

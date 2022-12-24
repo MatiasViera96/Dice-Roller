@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class system {
-
+  RegExp regExp = new RegExp();
   /**
    * This function calculates all the values of the dice rolled and returns them.
    * diceType.length must be equal to diceAmount.length
@@ -23,6 +23,15 @@ public class system {
    */
   public List<Integer>[] rollDie(int[] diceType, int[] diceAmount) throws Exception {
     return new dieController().rollDie(diceType, diceAmount);
+  }
+
+  /**
+   * This method is used to verify the input data for the dice roller app.
+   * @param data input data to be verifed
+   * @return data if input data is correct or null if not
+   */
+  public String verifyInputData (String data){
+    return regExp.matchStringInputData(data);
   }
 
 }
