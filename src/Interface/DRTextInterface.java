@@ -3,66 +3,86 @@ package Interface;
 import Domain.Classes.system;
 
 import java.sql.SQLOutput;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Scanner;
 
 public class DRTextInterface {
 
-  private final system syst;
- public DRTextInterface(){
-   this.syst = new system();
- }
+  private static final system syst = new system();
+
+  // Default constructor method
   /**
-   * This method runs the dice roll app on the terminal
+   * main method for DR text interface
+    */
+  public static void main(String[] args){
+    Menu();
+  }
+
+  /**
+   * Menu for dice roller app
    */
-  public void run(){
-    this.Menu();
+  private static void Menu(){
+    boolean exit = false;
+    clearScreen();
+    System.out.println("Welcome to dice roller text interface");
+    while (!exit){
+      textMenu();
+      Scanner inputData = new Scanner(System.in);
+      String data = inputData.nextLine();
+      try{
+        clearScreen();
+        int op = Integer.parseInt(data);
+        if (op == 1) diceRoller();
+        else if (op == 2) {
+          instructions();
+          clearScreen();
+        }
+        else if (op == 3) exit = true;
+      }catch (NumberFormatException n){
+        clearScreen();
+      }
+    }
   }
 
   /**
    * Main menu for dice roller app text interface
    */
-  private void textMenu(){
-    System.out.println("Welcome to dice roller text interface");
+  private static void textMenu(){
     System.out.println("Please select one of the following options");
     System.out.println("1- Roll die");
     System.out.println("2- Instructions");
     System.out.println("3- Exit");
-  }
-
-  /**
-   * Error message for when the user selects the wrong menu option
-   */
-  private void errorMessage(){
-    System.out.println("Please select one of the above options\n");
+    System.out.print("Option: ");
   }
 
   /**
    * This menu clears the screen inserting a 100 \n
    */
-  private void clearScreen(){
+  private static void clearScreen(){
     for(int i =0;i<100;i++){
       System.out.println();
     }
   }
 
-  private void instructions (){
-    this.clearScreen();
+  private static void instructions (){
+    clearScreen();
     System.out.println("This apps rolls dice of 4 ,6 ,8 ,10, 12 or 20 sides");
     System.out.println("you can roll 1 die or several dice");
-    System.out.println("If you want to roll one die, for example a 6 side die. In terminal you write 6 when xxx message appears and 1 when yyy message appears");
-    System.out.println("If you want roll roll several dice, for example 2d6 and 3d4. In terminal you write 6,4 when xxx message appears and 2,3 when yyy message appears");
-    System.out.println("Remember that you must write the same amount of numbers when xxx and yyy messages appears");
-    System.out.println("\nPress any key to return to main menu");
+    System.out.println("If you want to roll one die, for example a 6 side die. In terminal you write 6 when \"Types of die to roll\" message appears and 1 when \"Amount of die to roll\" message appears");
+    System.out.println("If you want roll roll several dice, for example 2d6 and 3d4. In terminal you write 6,4 when \"Types of die to roll\" message appears and 2,3 when \"Amount of die to roll\" message appears");
+    System.out.println("Remember that you must write the same amount of numbers when \"Types of die to roll\" and \"Amount of die to roll\" messages appears");
+    System.out.print("\nPress any key to return to main menu");
     try{
       System.in.read();
     }catch (Exception e){}
   }
 
-  private void diceRoller(){
+  private static void diceRoller(){
     try{
       System.out.print("Types of die to roll: ");
       int [] dieType = recibeInputData();
+      validateDieSides(dieType);
       System.out.print("\nAmount of die to roll: ");
       int [] dieAmount = recibeInputData();
       List<Integer>[] rolledValues = syst.rollDie(dieType,dieAmount);
@@ -80,42 +100,18 @@ public class DRTextInterface {
     } catch (ExitExcepetion e){
       //returns to main menu
     } catch (Exception e){
+      clearScreen();
       System.out.println(e.getMessage());
     }
   }
-  /**
-   * Menu for dice roller app
-   */
-  private void Menu(){
-    boolean exit = false;
-    this.clearScreen();
-    while (!exit){
-      this.textMenu();
-      Scanner inputData = new Scanner(System.in);
-      String data = inputData.nextLine();
-      try{
-        int op = Integer.parseInt(data);
-        if (op <0 || op > 3) this.errorMessage();
-        else if (op == 1) this.diceRoller();
-        else if (op == 2) {
-          this.instructions();
-          this.clearScreen();
-        }
-        else if (op == 3) exit = true;
-      }catch (NumberFormatException n){
-        this.clearScreen();
-        this.errorMessage();
-      }
-    }
 
-  }
 
-  private int[] recibeInputData()throws ExitExcepetion,Exception{
+  private static int[] recibeInputData()throws ExitExcepetion,Exception{
     int [] ret;
     Scanner inputData = new Scanner(System.in);
     String data = inputData.nextLine();
     if (data.contains("exit")) throw new ExitExcepetion("exit");
-    this.validateInputData(data);
+    validateInputData(data);
     String [] splitedData = data.split(",");
     ret = new int[splitedData.length];
     for (int i =0; i<splitedData.length;i++){
@@ -124,15 +120,26 @@ public class DRTextInterface {
     return ret;
   }
 
-  private void validateInputData(String data) throws Exception{
-    data = this.syst.verifyInputData(data);
-    if (data == null) throw new Exception("Error: Data input must be \"exit\" or a number(s) separated by \",\"");
+  private static void validateInputData(String data) throws Exception{
+    data = syst.verifyInputData(data);
+    if (data == null) throw new Exception("Error: Data input only accepts numbers separated by \",\"");
+  }
+
+  private static void validateDieSides(int[] data) throws Exception{
+    int [] validEntrys = {4,6,8,10,12,20};
+    for(int i =0; i<data.length;i++){
+      boolean found = false;
+      for(int j = 0;j< validEntrys.length && !found;j++){
+        if(data[i] == validEntrys[j]) found =true;
+      }
+      if(!found) throw new Exception("dieType values must be 4,6,10,12 or 20");
+    }
   }
 
   /**
    * class used to recibe the exit command in text interface
    */
-  class ExitExcepetion extends Exception{
+  static class ExitExcepetion extends Exception{
     public ExitExcepetion(String message){
       super(message);
     }

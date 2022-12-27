@@ -50,7 +50,7 @@ public class dieController {
    * @throws Exception In case that this function detects an error in the data input returns an exception with the
    *                   corresponding error message
    */
-  private void checkDieDataEntry(int[] diceType, int[] diceAmount)throws Exception{
+  void checkDieDataEntry(int[] diceType, int[] diceAmount)throws Exception{
     if(diceType.length!=diceAmount.length) throw new Exception("Error: the amount of dice to roll must be equal to the length of diceType");
     int [] check ={4,6,8,10,12,20};
     for(int i =0;i<diceType.length;i++) {

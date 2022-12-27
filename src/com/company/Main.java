@@ -8,12 +8,7 @@ import Interface.DRInterface;
 public class Main {
 
   public static void main(String[] args) {
-    testDRWTextInterface();
-  }
-
-  public static void testDRWTextInterface(){
-    DRTextInterface txtInterface = new DRTextInterface();
-    txtInterface.run();
+    testDRWGUI();
   }
 
   public static void testDRWGUI() {
