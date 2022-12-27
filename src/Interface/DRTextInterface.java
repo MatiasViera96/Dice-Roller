@@ -2,8 +2,7 @@ package Interface;
 
 import Domain.Classes.system;
 
-import java.sql.SQLOutput;
-import java.text.ParseException;
+import Interface.RegExp;
 import java.util.List;
 import java.util.Scanner;
 
@@ -121,10 +120,16 @@ public class DRTextInterface {
   }
 
   private static void validateInputData(String data) throws Exception{
-    data = syst.verifyInputData(data);
+    RegExp regExp = new RegExp();
+    data = regExp.matchStringInputData(data);
     if (data == null) throw new Exception("Error: Data input only accepts numbers separated by \",\"");
   }
 
+  /**
+   * This method is used to verify that the die (or dice) that the user selected are the ones the app allows
+   * @param data int[] data array to be verified
+   * @throws Exception throws an exception in case that any of the numbers chosen by the user are not allowed
+   */
   private static void validateDieSides(int[] data) throws Exception{
     int [] validEntrys = {4,6,8,10,12,20};
     for(int i =0; i<data.length;i++){
